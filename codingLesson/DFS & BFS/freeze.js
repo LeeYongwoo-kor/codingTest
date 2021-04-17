@@ -1,4 +1,3 @@
-// *********************** CODING PRACTICE ONLY ************************
 // 음료수 얼려먹기
 function solution(s) {
   let result = 0;

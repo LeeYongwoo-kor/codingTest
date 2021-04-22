@@ -1,4 +1,3 @@
-// *********************** CODING PRACTICE ONLY ************************
 let pos = 0;
 
 function solution(p) {

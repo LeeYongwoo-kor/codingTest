@@ -1,35 +1,18 @@
-// 정렬된 배열에서 특정 수의 개수 구하기 (단, Big O(logN)을 만족할 것)
-function solution(s) {
-  const element = Number(s[0].split(" ")[1]);
-  const array = s[1]
-    .split(" ")
-    .map((item) => Number(item))
-    .sort();
+// 개미 전사 -> dp테이블을 이용할 것
+function solution(input) {
+  const n = Number(input[0]);
+  const warehouse = input[1].split(" ").map((item) => Number(item));
+  let dp = new Array(100);
 
-  const result = binarySearch(array, element);
-
-  return console.log(result);
-}
-
-const binarySearch = (sortedArray, seekElement) => {
-  let start = 0;
-  let end = sortedArray.length - 1;
-
-  while (start <= end) {
-    const mid = start + Math.floor((end - start) / 2);
-    if (sortedArray[mid] === seekElement) {
-      return mid;
-    }
-    if (sortedArray[mid] < seekElement) {
-      start = mid + 1;
-    } else {
-      end = mid - 1;
-    }
+  dp[0] = warehouse[0];
+  dp[1] = Math.max(warehouse[0], warehouse[1]);
+  for (let i = 2; i < n; i++) {
+    dp[i] = Math.max(dp[i - 1], dp[i - 2] + warehouse[i]);
   }
 
-  return -1;
-};
+  return dp[n - 1];
+}
 
-const s = ["7 2", "1 1 2 2 2 2 3"];
+const n = ["5", "1 3 1 5 8"];
 
-solution(s);
+console.log(solution(n));

@@ -5,8 +5,9 @@ let frameCount = 0;
 let pinCount = 0;
 let throwCount = 0;
 
-function Frame(scoreBoard = []) {
+function Frame(scoreBoard = [], score = 0) {
   this.scoreBoard = scoreBoard;
+  this.score = score;
 }
 
 Frame.prototype.strike = function () {
@@ -18,7 +19,12 @@ Frame.prototype.strike = function () {
 };
 
 Frame.prototype.spare = function () {
-  if (this.scoreBoard.length < 2) return false;
+  if (this.scoreBoard[0] === pinCount) {
+    if (this.scoreBoard.length >= 3 && this.scoreBoard[1] === pinCount) {
+      return true;
+    }
+    return false;
+  }
   let sum = this.scoreBoard[0] + (this.scoreBoard[1] || 0);
   if (sum === pinCount) {
     return true;
@@ -59,16 +65,52 @@ const line = (line) => {
     throwCount = splits[2];
     lines.push(line);
   } else {
+    if (throwCount !== splits.length) return;
     const throwArr = splits.map((value) => (value === "G" ? 0 : value));
     const gameBoard = frameDivision(throwArr).reduce((acc, curr) => {
       return [...(acc || []), new Frame(curr)];
     }, []);
-    console.log(gameBoard);
+
+    gameBoard.forEach((game, idx, board) => {
+      let score = game.scoreBoard.reduce((a, b) => a + b);
+      if (idx === frameCount - 1) {
+        // Last Frame
+        let bonusgame = game.scoreBoard[game.scoreBoard.length - 1];
+        if (game.strike() && game.spare()) {
+          score = game.scoreBoard[0] + game.scoreBoard[1] * 2 + bonusgame * 3;
+        } else if (game.strike()) {
+          score = game.scoreBoard[0] + game.scoreBoard[1] * 2 + bonusgame * 2;
+        } else if (game.spare()) {
+          score += bonusgame;
+        }
+      } else {
+        if (game.strike()) {
+          if (board[idx + 1].strike()) {
+            score +=
+              pinCount +
+              (board[idx + 2].scoreBoard[0] || board[idx + 1].scoreBoard[1]);
+          } else {
+            score +=
+              board[idx + 1].scoreBoard[0] + board[idx + 1].scoreBoard[1];
+          }
+        } else if (game.spare()) {
+          score += board[idx + 1].scoreBoard[0];
+        }
+      }
+      game.score = score;
+    });
+
+    let total = 0;
+    for (let board of gameBoard) {
+      total += board.score;
+    }
+
+    lines.push(total);
   }
 };
 
 const close = () => {
-  console.log(cases);
+  console.log(lines[1]);
 };
 
 window.onload = () => {

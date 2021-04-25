@@ -1,53 +1,32 @@
 // *********************** CODING PRACTICE ONLY ************************
-let pos = 0;
+function solution(input) {
+  const splits = input[0].split(" ").map((item) => Number(item));
+  const n = splits[0];
+  const m = splits[1];
 
-function solution(p) {
-  if (!p || !p.trim()) return p;
+  let unit = [];
+  for (let i = 1; i < input.length; i++) {
+    unit.push(Number(input[i]));
+  }
 
-  const bracketCheck = (p) => {
-    let ret = true;
-    let left = 0,
-      right = 0;
-    let stack = [];
-    for (let i = 0; i < p.length; i++) {
-      if (p[i] === "(") {
-        left++;
-        stack.push("(");
-      } else {
-        right++;
-        if (Array.isArray(stack) && stack.length === 0) {
-          ret = false;
-        } else {
-          stack.pop();
-        }
-        if (left === right) {
-          pos = i + i;
-          return ret;
-        }
+  let d = new Array(m + 1).fill(10001);
+  d[0] = 0;
+
+  for (let bill of unit) {
+    for (let i = bill; i <= m; i++) {
+      if (d[i - bill] !== 10001) {
+        d[i] = Math.min(d[i], d[i - bill] + 1);
       }
     }
-    return true;
-  };
-
-  let correctBracket = bracketCheck(p);
-  const u = p.slice(0, pos);
-  const v = p.slice(pos);
-
-  if (correctBracket) {
-    return u + solution(v);
   }
 
-  let result = "(" + solution(v) + ")";
-  for (let i = 1; i < u.length - 1; i++) {
-    if (u[i] === "(") {
-      result += ")";
-    } else {
-      result += "(";
-    }
+  if (d[m] === 10001) {
+    return -1;
+  } else {
+    return d[m];
   }
-  return result;
 }
 
-const p = "()))((()";
+const input = ["3 7", "2", "3", "5"];
 
-console.log(solution(p));
+console.log(solution(input));

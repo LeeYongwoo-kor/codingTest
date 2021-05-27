@@ -1,5 +1,12 @@
-// *********************** PAIZA ONLY ************************
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+// 自分の得意な言語で
+// Let's チャレンジ！！
 var lines = [];
+var reader = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 let count = 0;
 let balance = 0;
@@ -20,18 +27,7 @@ const combination = (list, num) => {
   return result;
 };
 
-const line = (line) => {
-  if (lines.length === 0) {
-    let splits = line.split(" ").map((item) => Number(item));
-    count = splits[0];
-    balance = splits[1];
-    lines.push(line);
-  } else {
-    priceList.push(Number(line));
-  }
-};
-
-const close = () => {
+reader.on("line", (line) => {
   priceList.sort((a, b) => b - a);
   for (let i = priceList.length; i > 0; i--) {
     let combiResult = [];
@@ -53,24 +49,4 @@ const close = () => {
   }
 
   console.log(basket[0]);
-};
-
-window.onload = () => {
-  line("15 10000");
-  line("100");
-  line("200");
-  line("400");
-  line("3500");
-  line("2200");
-  line("1750");
-  line("1200");
-  line("1380");
-  line("2000");
-  line("500");
-  line("990");
-  line("350");
-  line("3900");
-  line("5000");
-  line("2000");
-  close();
-};
+});

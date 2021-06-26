@@ -1,5 +1,12 @@
-// *********************** PAIZA ONLY ************************
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+// 自分の得意な言語で
+// Let's チャレンジ！！
 var lines = [];
+var reader = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 const searchCombi = (arr) => {
   let tmpArr = [];
@@ -17,7 +24,7 @@ const searchCombi = (arr) => {
   return tmpArr;
 };
 
-const line = (line) => {
+reader.on("line", (line) => {
   let splits = line.toLowerCase().split(" ");
   const firstArr = Array.from(splits[0]).map((item) =>
     Number(item.charCodeAt(0) - 96)
@@ -30,13 +37,7 @@ const line = (line) => {
   const secondCombi = searchCombi([...secondArr, ...firstArr]);
 
   lines.push(Math.max(...[firstCombi, secondCombi]));
-};
-
-const close = () => {
+});
+reader.on("close", () => {
   console.log(lines[0]);
-};
-
-window.onload = () => {
-  line("alice bob");
-  close();
-};
+});

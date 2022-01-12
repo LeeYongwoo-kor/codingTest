@@ -1,4 +1,3 @@
-// *********************** PROGRAMMERS ONLY ************************
 function solution(n) {
   var answer = "";
 
@@ -6,10 +5,10 @@ function solution(n) {
 
   do {
     answer = rule[n % 3] + answer;
-    n = parseInt(n / 3) - (n % 3 === 0 ? 1 : 0);
+    n = n / 3;
   } while (n !== 0);
 
   return answer;
 }
 
-console.log(solution(3));
+console.log(solution(5));

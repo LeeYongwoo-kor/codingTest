@@ -1,4 +1,3 @@
-// *********************** PROGRAMMERS ONLY ************************
 function solution(relation) {
   let column = relation[0].length;
   let row = relation.length;

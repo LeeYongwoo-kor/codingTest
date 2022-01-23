@@ -1,18 +1,15 @@
-// *********************** PROGRAMMERS ONLY ************************
 function solution(n, words) {
-  var answer = [0, 0];
+  let answer = 0;
+  words.reduce((prev, now, idx) => {
+    answer =
+      answer ||
+      (words.slice(0, idx).indexOf(now) !== -1 || prev !== now[0]
+        ? idx
+        : answer);
+    return now[now.length - 1];
+  }, "");
 
-  words.reduce((acc, word, idx) => {
-    if (idx === 0) return (acc = [words[0]]);
-    if (acc[idx - 1].at(-1) !== word.at(0) || acc.includes(word)) {
-      answer[0] = (acc.length % n) + 1;
-      answer[1] = Math.ceil((acc.length + 1) / n);
-      words.length = 0;
-    }
-    return [...(acc || []), word];
-  }, []);
-
-  return answer;
+  return answer ? [(answer % n) + 1, Math.floor(answer / n) + 1] : [0, 0];
 }
 
 console.log(

@@ -1,4 +1,3 @@
-// *********************** PROGRAMMERS ONLY ************************
 function solution(n, words) {
   var answer = [0, 0];
 

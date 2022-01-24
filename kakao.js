@@ -1,54 +1,24 @@
 // *********************** PROGRAMMERS ONLY ************************
-function solution(n, words) {
-  var answer = [0, 0];
-
-  words.reduce((acc, word, idx) => {
-    if (idx === 0) return (acc = [words[0]]);
-    if (acc[idx - 1].at(-1) !== word.at(0) || acc.includes(word)) {
-      answer[0] = (acc.length % n) + 1;
-      answer[1] = Math.ceil((acc.length + 1) / n);
-      words.length = 0;
-    }
-    return [...(acc || []), word];
-  }, []);
-
-  return answer;
-}
+function solution(files) {}
 
 console.log(
-  solution(3, [
-    "tank",
-    "kick",
-    "know",
-    "wheel",
-    "land",
-    "dream",
-    "mother",
-    "robot",
-    "tank",
+  solution([
+    "img12.png",
+    "img10.png",
+    "img02.png",
+    "img1.png",
+    "IMG01.GIF",
+    "img2.JPG",
   ])
 );
 
 console.log(
-  solution(5, [
-    "hello",
-    "observe",
-    "effect",
-    "take",
-    "either",
-    "recognize",
-    "encourage",
-    "ensure",
-    "establish",
-    "hang",
-    "gather",
-    "refer",
-    "reference",
-    "estimate",
-    "executive",
+  solution([
+    "F-5 Freedom Fighter",
+    "B-50 Superfortress",
+    "A-10 Thunderbolt II",
+    "F-14 Tomcat",
   ])
 );
 
-console.log(
-  solution(2, ["hello", "one", "even", "never", "now", "world", "draw"])
-);
+console.log(solution([1, 461, 1, 10], ["00:00 1234 IN"]));

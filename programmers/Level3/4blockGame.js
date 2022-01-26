@@ -1,4 +1,3 @@
-// *********************** PROGRAMMERS ONLY ************************
 const destroyBlock = (target) => {
   const origin = target.map((v) => v.slice());
   for (let i = 0; i < origin.length - 1; i++) {

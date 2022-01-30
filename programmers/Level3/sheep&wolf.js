@@ -1,4 +1,4 @@
-// *********************** PROGRAMMERS ONLY ************************
+// hold
 function solution(info, edges) {
   var answer = 0;
   const sheepWolfInfo = info.map((value) => (value === 0 ? 1 : -1));

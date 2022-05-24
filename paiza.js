@@ -1,58 +1,92 @@
 // *********************** PAIZA ONLY ************************
 var lines = [];
 
-let date = 0;
-let init = 0;
-let limit = 0;
+let table = [];
+let kinds = 0;
+let count = 0;
 
-let dietPlan = [];
-let dp = [];
+let answer = 1;
+
+const transpose = (matrix) =>
+  matrix.reduce(
+    (result, row) => row.map((_, i) => [...(result[i] || []), row[i]]),
+    []
+  );
+
+const hasDuplicates = (keyword) => new Set(keyword).size !== keyword.length;
+
+const combination = (list, num) => {
+  let result = [];
+  if (num === 1) return list.map((e) => [e]);
+
+  list.forEach((el, idx, arr) => {
+    let rest = arr.slice(idx + 1);
+    let combinations = combination(rest, num - 1);
+    let combiArr = combinations.map((x) => [el, ...x]);
+    result.push(...combiArr);
+  });
+  return result;
+};
 
 const line = (line) => {
-  let splits = line.split(" ").map((item) => Number(item));
   if (lines.length === 0) {
-    date = splits[0];
-    init = splits[1];
-    limit = splits[2];
+    const splits = line.split(" ").map((input) => Number(input));
+    count = splits[0];
+    kinds = splits[1];
     lines.push(line);
-  } else {
-    dietPlan.push(splits);
+  }
+
+  while (table.length < count) {
+    const splits = line.split(" ").map((input) => Number(input));
+    table.push(splits);
+  }
+
+  const list = transpose(table);
+
+  const checkMinValue = () => {
+    for (let i = 1; i < kinds; i++) {
+      if (i ** 2 >= count) {
+        return i;
+      }
+    }
+    return kinds;
+  };
+
+  const minValue = checkMinValue();
+
+  for (let i = minValue; i < kinds; i++) {
+    const checkIdx = combination(
+      Array.from({ length: kinds }, (_, idx) => idx),
+      i
+    );
+
+    const checkArr = list.filter((_, idx) => {
+      for (let j of checkIdx) {
+        if (idx === j) return idx;
+      }
+    });
+
+    checkIdx.forEach((item) => {
+      transpose();
+    });
   }
 };
 
 const close = () => {
-  let perfectPlan = Math.pow(2, date);
-
-  const dietFail =
-    dietPlan.reduce((arr, curr) => (arr += curr[1])) - (limit - init);
-
-  dietPlan = dietPlan.reduce((acc, curr) => {
-    return [...(acc || []), curr[0] + curr[1]];
-  }, []);
-  dp = new Array(4537567650);
-  for (let i = 0; i < dietPlan.length; i++) {
-    dp[i] = dietPlan[i];
-  }
-
-  for (let i = 0; i < date; i++) {
-    for (let j = 0; j < date; j++) {
-      if (dp[i] >= dietFail) {
-        continue;
-      }
-      perfectPlan--;
-    }
-  }
+  console.log(line);
 };
 
 window.onload = () => {
-  line("8 300 400");
-  line("9 39");
-  line("48 38");
-  line("21 10");
-  line("14 45");
-  line("32 20");
-  line("32 48");
-  line("9 7");
-  line("19 16");
+  line("10 6");
+  line("1 1 1 0 1 1");
+  line("1 0 1 1 0 1");
+  line("0 0 0 1 1 1");
+  line("0 1 1 0 0 0");
+  line("1 1 1 1 1 0");
+  line("1 0 0 0 0 1");
+  line("1 1 0 1 0 1");
+  line("0 1 0 0 0 0");
+  line("1 1 0 0 1 1");
+  line("1 0 1 1 1 0");
   close();
 };

@@ -1,5 +1,12 @@
-// *********************** PAIZA ONLY ************************
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+// 自分の得意な言語で
+// Let's チャレンジ！！
 var lines = [];
+var reader = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 let table = [];
 let kinds = 0;
@@ -38,7 +45,7 @@ const combination = (list, num) => {
   return result;
 };
 
-const line = (line) => {
+reader.on("line", (line) => {
   if (lines.length === 0) {
     const splits = line.split(" ").map((input) => Number(input));
     count = splits[0];
@@ -88,27 +95,7 @@ const line = (line) => {
   }
 
   answer = count;
-};
-
-const close = () => {
+});
+reader.on("close", () => {
   console.log(answer);
-};
-
-window.onload = () => {
-  line("3 3");
-  line("1 1 1");
-  line("0 0 1");
-  line("0 1 0");
-  // line("10 6");
-  // line("1 1 1 0 1 1");
-  // line("1 0 1 1 0 1");
-  // line("0 0 0 1 1 1");
-  // line("0 1 1 0 0 0");
-  // line("1 1 1 1 1 0");
-  // line("1 0 0 0 0 1");
-  // line("1 1 0 1 0 1");
-  // line("0 1 0 0 0 0");
-  // line("1 1 0 0 1 1");
-  // line("1 0 1 1 1 0");
-  close();
-};
+});

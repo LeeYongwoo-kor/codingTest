@@ -1,6 +1,12 @@
-// *********************** PAIZA ONLY ************************
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+// 自分の得意な言語で
+// Let's チャレンジ！！
 var lines = [];
-
+var reader = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 let width = 0;
 let height = 0;
 let rgb = [0, 0, 0, 0];
@@ -13,8 +19,7 @@ const colorHash = {
 
 const colorTable = [];
 let nodeTable = [];
-
-const line = (line) => {
+reader.on("line", (line) => {
   if (lines.length === 0) {
     const splits = line.split(" ").map((input) => Number(input));
     height = splits[0];
@@ -24,9 +29,8 @@ const line = (line) => {
   }
 
   colorTable.push(line.split(""));
-};
-
-const close = () => {
+});
+reader.on("close", () => {
   nodeTable = Array(height)
     .fill(0)
     .map(() => Array(width).fill(0));
@@ -60,18 +64,4 @@ const close = () => {
   }
 
   console.log(`${rgb[1]} ${rgb[2]} ${rgb[3]}`);
-};
-
-window.onload = () => {
-  line("5 5");
-  line("RRRGG");
-  line("RRRGG");
-  line("BBBBB");
-  line("RRGGG");
-  line("GRGGG");
-  // line("3 2");
-  // line("RG");
-  // line("GB");
-  // line("BR");
-  close();
-};
+});

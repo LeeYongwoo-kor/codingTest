@@ -35,31 +35,27 @@ reader.on("close", () => {
     .fill(0)
     .map(() => Array(width).fill(0));
 
-  for (let i = 0; i < height; i++) {
-    for (let j = 0; j < width; j++) {
-      let isJoin = false;
+  const visit = (x, y, color) => {
+    if (x <= -1 || x >= height || y <= -1 || y >= width) {
+      return false;
+    }
 
-      if (nodeTable[i][j] === 0) {
-        nodeTable[i][j] = colorHash[colorTable[i][j]];
-      }
+    if (nodeTable[x][y] === 0 && colorTable[x][y] === color) {
+      nodeTable[x][y] = colorHash[color];
+      visit(x - 1, y, color);
+      visit(x, y - 1, color);
+      visit(x + 1, y, color);
+      visit(x, y + 1, color);
+      return true;
+    }
 
-      if (i < height - 1) {
-        if (colorTable[i + 1][j] === colorTable[i][j]) {
-          nodeTable[i + 1][j] = colorHash[colorTable[i][j]];
-          isJoin = true;
-        }
-      }
+    return false;
+  };
 
-      if (j < width - 1) {
-        if (colorTable[i][j + 1] === colorTable[i][j]) {
-          nodeTable[i][j + 1] = colorHash[colorTable[i][j]];
-          isJoin = true;
-        }
-      }
-
-      if (!isJoin) {
-        rgb[colorHash[colorTable[i][j]]]++;
-      }
+  for (let i = 0; i < colorTable.length; i++) {
+    for (let j = 0; j < colorTable[i].length; j++) {
+      if (nodeTable[i][j] !== 0) continue;
+      if (visit(i, j, colorTable[i][j])) rgb[colorHash[colorTable[i][j]]]++;
     }
   }
 

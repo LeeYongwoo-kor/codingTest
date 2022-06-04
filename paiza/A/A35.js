@@ -1,6 +1,12 @@
-// *********************** PAIZA ONLY ************************
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+// 自分の得意な言語で
+// Let's チャレンジ！！
 var lines = [];
-
+var reader = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 let scoreArr = [];
 let enumerateScoreList = [];
 
@@ -17,17 +23,15 @@ const combination = (list, num) => {
 
   return result;
 };
-
-const line = (line) => {
+reader.on("line", (line) => {
   if (lines.length === 0) {
     lines.push(line);
     return;
   }
 
   scoreArr.push(Number(line));
-};
-
-const close = () => {
+});
+reader.on("close", () => {
   scoreArr.forEach((item, idx) => {
     const combinationResult = combination(scoreArr, idx + 1);
     const sumResult = combinationResult.reduce((acc, curr) => {
@@ -43,18 +47,4 @@ const close = () => {
   enumerateScoreList.forEach((result) => {
     console.log(result);
   });
-};
-
-window.onload = () => {
-  // line("4");
-  // line("6");
-  // line("14");
-  // line("25");
-  // line("55");
-  line("4");
-  line("25");
-  line("25");
-  line("25");
-  line("25");
-  close();
-};
+});

@@ -8,21 +8,7 @@ var reader = require("readline").createInterface({
   output: process.stdout,
 });
 let scoreArr = [];
-let enumerateScoreList = [];
 
-const combination = (list, num) => {
-  let result = [];
-  if (num === 1) return list.map((item) => [item]);
-
-  list.forEach((item, idx, arr) => {
-    let rest = arr.slice(idx + 1);
-    let combinations = combination(rest, num - 1);
-    let enumerated = combinations.map((x) => [item, ...x]);
-    result.push(...enumerated);
-  });
-
-  return result;
-};
 reader.on("line", (line) => {
   if (lines.length === 0) {
     lines.push(line);
@@ -32,19 +18,35 @@ reader.on("line", (line) => {
   scoreArr.push(Number(line));
 });
 reader.on("close", () => {
-  scoreArr.forEach((item, idx) => {
-    const combinationResult = combination(scoreArr, idx + 1);
-    const sumResult = combinationResult.reduce((acc, curr) => {
-      const sum = curr.reduce((a, b) => a + b);
-      return [...(acc || []), sum];
-    }, []);
-    enumerateScoreList = [...new Set([...enumerateScoreList, ...sumResult])];
-  });
+  const sortScoreArr = scoreArr
+    .filter((score) => score <= 50)
+    .sort((a, b) => a - b);
 
-  enumerateScoreList = [0, ...enumerateScoreList].sort((a, b) => a - b);
+  const resultSet = new Set([...sortScoreArr]);
 
-  console.log(enumerateScoreList.length);
-  enumerateScoreList.forEach((result) => {
-    console.log(result);
+  for (let i = 0; i < sortScoreArr.length; i++) {
+    for (let j = i + 1; j < sortScoreArr.length; j++) {
+      let sum = sortScoreArr[i];
+      for (let k = j; k < sortScoreArr.length; k++) {
+        sum += sortScoreArr[k];
+        if (sum > 50) break;
+        resultSet.add(sum);
+      }
+    }
+  }
+
+  resultSet.add(0);
+
+  const scoreMapper = [
+    ...[...resultSet].reduce((acc, score) => {
+      if (score === 50) return [...(acc || [])];
+      return [...(acc || []), 100 - score];
+    }, []),
+    ...resultSet,
+  ].sort((a, b) => a - b);
+
+  console.log(scoreMapper.length);
+  scoreMapper.forEach((print) => {
+    console.log(print);
   });
 });

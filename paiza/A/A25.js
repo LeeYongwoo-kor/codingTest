@@ -8,36 +8,56 @@ var reader = require("readline").createInterface({
   output: process.stdout,
 });
 
-let date = 0;
-let init = 0;
-let limit = 0;
-let cases = 0;
-let dietFailArr = [];
+const a = [];
+const b = [];
 
 reader.on("line", (line) => {
   const splits = line.split(" ").map((item) => Number(item));
+
   if (lines.length === 0) {
-    date = splits[0];
-    init = splits[1];
-    limit = splits[2];
-    lines.push(line);
+    lines.push(splits[0], splits[1], splits[2]);
   } else {
-    if (dietFailArr.length <= date) {
-      dietFailArr.push([splits[0] * -1, splits[1]]);
-    }
+    a.push(splits[0]);
+    b.push(splits[1]);
   }
 });
+
 reader.on("close", () => {
-  for (let i = 0; i < Math.pow(2, date) - 1; i++) {
-    let currentWeight = init;
-    const casesArr = Array.from(i.toString(2).padStart(date, 0)).map((item) =>
-      Number(item)
-    );
-    for (let j = 0; j < date; j++) {
-      currentWeight += dietFailArr[j][casesArr[j]];
-      if (currentWeight > limit) break;
-      if (j === date - 1) cases++;
+  const countWays = (n, s, t, a, b) => {
+    const dp = Array.from({ length: n + 1 }, () => new Map());
+
+    function helper(day, weight) {
+      if (day === n) {
+        return 1;
+      }
+
+      if (weight > t) {
+        return 0;
+      }
+
+      if (dp[day].has(weight)) {
+        return dp[day].get(weight);
+      }
+
+      let ways = 0;
+
+      // Diet
+      if (weight - a[day] <= t) {
+        ways += helper(day + 1, weight - a[day]);
+      }
+
+      // No diet
+      if (weight + b[day] <= t) {
+        ways += helper(day + 1, weight + b[day]);
+      }
+
+      dp[day].set(weight, ways);
+      return ways;
     }
-  }
-  console.log(cases);
+
+    return helper(0, s);
+  };
+
+  const [n, s, t] = lines;
+  console.log(countWays(n, s, t, a, b));
 });
